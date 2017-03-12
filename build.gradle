@@ -16,15 +16,18 @@ dependencies {
     compile 'org.apache.velocity:velocity:1.7'
 
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4-rc-3'
+    testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7'
 }
 
 task bootRun(type: JavaExec) {
     classpath = files('libs/mockserver-netty-3.10.4-jar-with-dependencies.jar')
     main = "org.mockserver.cli.Main"
-    args('-serverPort', '8181')
+    args('-serverPort', System.getenv("port") != null ? System.getenv("port") : "8181")
 }
 
 task push(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'fakefast.pushScript'
 }
+
+test.dependsOn push
