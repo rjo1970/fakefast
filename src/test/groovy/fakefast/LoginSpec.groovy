@@ -1,6 +1,7 @@
 package fakefast
 
 import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.HttpResponseException
 import spock.lang.*
 
 class LoginSpec extends Specification {
@@ -8,7 +9,7 @@ class LoginSpec extends Specification {
     def "login works for John"() {
         HTTPBuilder http = new HTTPBuilder('http://localhost:8181')
         def text
-        def statusCode
+        def resultCode
         http.setHeaders([Authorization: new AuthorizationHeader(
                 type: 'Basic',
                 name: 'John',
@@ -16,24 +17,24 @@ class LoginSpec extends Specification {
         when:
         http.post(path: "/user/login", ) { resp, reader ->
             text =  reader.text
-            statusCode =  resp.statusLine.statusCode
+            resultCode =  resp.statusLine.statusCode
         }
         then:
         text =~ /name: John/
-        statusCode == 200
+        resultCode == 200
     }
 
-    @Ignore
-    def "login fails for an unauthorized attempt"() {
+
+    def "login fails for an Unauthorized attempt"() {
         HTTPBuilder http = new HTTPBuilder('http://localhost:8181')
         def text
-        def statusCode
+        def resultCode
         when:
         http.post(path: "/user/login", ) { resp, reader ->
             text =  reader.text
-            statusCode =  resp.statusLine.statusCode
+            resultCode =  resp.statusLine.statusCode
         }
         then:
-        statusCode == 401
+        thrown HttpResponseException
     }
 }

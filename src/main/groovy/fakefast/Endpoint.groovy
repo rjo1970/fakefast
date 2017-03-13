@@ -17,8 +17,10 @@ public class Endpoint {
         Users.find().each { name ->
             Endpoint endpoint = new Endpoint()
             copyProperties(this, endpoint)
-            if (name != 'unauthorized') {
-                endpoint.name = name
+            endpoint.name = name
+            if (name == 'unauthorized') {
+                endpoint.authorizationHeader = null
+            } else {
                 if (endpoint.authorizationHeader) {
                     endpoint.authorizationHeader.name = name
                 }
@@ -34,12 +36,14 @@ public class Endpoint {
         }
     }
 
-
     def make() {
         Reader reader = new Reader(this)
         if (!reader.doesExist()) {
             return
         }
+
+        def config = new Users(name: name, service: service).readServices()
+        resultCode = config["resultCode"]
 
         def req = request()
                 .withMethod(method)

@@ -24,12 +24,16 @@ class Users {
     }
 
     def readServices() {
-        def stuff = new File("src/main/resources/${name}/services.json").text
-        def body = new JsonSlurper().parseText(stuff)
-        def section = body[service]
-        if (section == null) {
+        try {
+            def stuff = new File("src/main/resources/${name}/services.json").text
+            def body = new JsonSlurper().parseText(stuff)
+            def section = body[service]
+            if (section == null) {
+                return [resultCode: 200]
+            }
+            section
+        } catch (FileNotFoundException e) {
             return [resultCode: 200]
         }
-        section
     }
 }

@@ -43,4 +43,22 @@ class UsersSpec extends Specification {
         then:
         result == [resultCode: 401]
     }
+
+    def "can recover a [resultCode: 200] if the file is not present"() {
+        def result
+        when:
+        result = new Users(name: "Ringo", service: "login").readServices()
+        then:
+        result == [resultCode: 200]
+    }
+
+    def "can recover a [resultCode: 200 if the file exists but the entry does not"() {
+        def result
+        when:
+        result = new Users(name: "Ringo", service: "login").readServices()
+        then:
+        result == [resultCode: 200]
+    }
+
+
 }
