@@ -6,19 +6,20 @@ import static org.mockserver.model.HttpResponse.response;
 
 public class Endpoint {
 
+    public static final String UNAUTHORIZED = "unauthorized"
     def service
     def url
     def method = "POST"
     def resultCode = 200
     AuthorizationHeader authorizationHeader
-    String name
+    String name = UNAUTHORIZED
 
     def makeAll() {
         Users.find().each { name ->
             Endpoint endpoint = new Endpoint()
             copyProperties(this, endpoint)
             endpoint.name = name
-            if (name == 'unauthorized') {
+            if (name == UNAUTHORIZED) {
                 endpoint.authorizationHeader = null
             } else {
                 if (endpoint.authorizationHeader) {
@@ -63,6 +64,7 @@ public class Endpoint {
         .respond(
             res
         )
+        Reporter.addEndpoint(this)
     }
 
     private MockServerClient build() {
