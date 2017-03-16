@@ -20,14 +20,20 @@ dependencies {
 }
 
 task bootRun(type: JavaExec) {
+    description "start the mock server"
     classpath = files('libs/mockserver-netty-3.10.4-jar-with-dependencies.jar')
     main = "org.mockserver.cli.Main"
     args('-serverPort', System.getenv("port") != null ? System.getenv("port") : "8181")
 }
 
-task push(type: JavaExec) {
+task pushit(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'fakefast.pushScript'
 }
 
-test.dependsOn push
+task push {
+    description "push endpoint definitions to server"
+}
+
+test.dependsOn pushit
+push.dependsOn pushit

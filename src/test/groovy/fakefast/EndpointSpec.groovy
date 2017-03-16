@@ -24,4 +24,15 @@ public class EndpointSpec extends Specification {
         result.authorizationHeader.value() == "Basic cGFudHM6cGFzc3dvcmQ="
     }
 
+    def "A URL can be given parameters, which will be broken into a parameter list and a base path"() {
+        def result
+        given:
+        result = new Endpoint(service: "foo", url: "/foo?a=1&b=two")
+        when:
+        result.make()
+        then:
+        result.path == "/foo"
+        result.pathArguments == [a: ["1"], b: ["two"]]
+    }
+
 }

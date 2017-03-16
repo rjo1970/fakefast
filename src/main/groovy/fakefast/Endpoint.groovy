@@ -9,6 +9,8 @@ public class Endpoint {
     public static final String UNAUTHORIZED = "unauthorized"
     def service
     def url
+    def path
+    def pathArguments
     def method = "POST"
     def resultCode = 200
     AuthorizationHeader authorizationHeader
@@ -43,12 +45,20 @@ public class Endpoint {
             return
         }
 
-        def config = new Users(name: name, service: service).readServices()
-        resultCode = config["resultCode"]
+        splitUrl()
+        resultCode = findResultCode()
+        createEndpoint(resultCode, reader)
+        Reporter.addEndpoint(this)
+    }
 
+    private void createEndpoint(resultCode, Reader reader) {
         def req = request()
                 .withMethod(method)
-                .withPath(url)
+                .withPath(path)
+
+        if (pathArguments.size() > 0) {
+            req = req.withQueryStringParameters(pathArguments)
+        }
 
         if (authorizationHeader) {
             req = req.withHeader(authorizationHeader.header())
@@ -59,12 +69,32 @@ public class Endpoint {
                 .withBody(reader.text())
 
         build().when(
-            req
+                req
         )
-        .respond(
-            res
+                .respond(
+                res
         )
-        Reporter.addEndpoint(this)
+    }
+
+    private Object findResultCode() {
+        def config = new Users(name: name, service: service).readServices()
+        resultCode = config["resultCode"]
+        resultCode
+    }
+
+    private splitUrl() {
+        def split = url.tokenize("?")
+        path = split[0]
+
+        if (split[1]) {
+            def argpairs = split[1].tokenize("&")
+            def argsList = argpairs.collect({ x -> x.tokenize("=") })
+            def entries = argsList.collect{ k, v -> [ (k) : [v] ] }
+            pathArguments = entries.inject([:]) { m, e -> m + e }
+        } else {
+            pathArguments = [:]
+        }
+
     }
 
     private MockServerClient build() {

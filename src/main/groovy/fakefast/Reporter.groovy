@@ -7,7 +7,7 @@ class Reporter {
         endpoints << generateEndpointReport(endpoint)
     }
 
-    public static String generateEndpointReport(Endpoint endpoint) {
+    private static String generateEndpointReport(Endpoint endpoint) {
         if (endpoint.name != Endpoint.UNAUTHORIZED) {
             "${endpoint.url} => ${endpoint.resultCode} (${endpoint.name})"
         } else {
