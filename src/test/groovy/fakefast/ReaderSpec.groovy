@@ -22,4 +22,15 @@ class ReaderSpec extends Specification {
         result.doesExist() == false
         result.text() == ""
     }
+
+    def "interpolates NAME, OAUTH, and SERVICE tags in vm scripts"() {
+        def endpoint = new Endpoint(service: "login", name: "John")
+        def result
+        when:
+        result = new Reader(endpoint).text()
+        then:
+        result.contains("name: \"John\"")
+        result.contains("token: \"JohnOAuth\"")
+        result.contains("service: \"login\"")
+    }
 }

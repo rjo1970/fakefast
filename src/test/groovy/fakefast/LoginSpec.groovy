@@ -20,7 +20,7 @@ class LoginSpec extends Specification {
             resultCode =  resp.statusLine.statusCode
         }
         then:
-        text =~ /name: John/
+        text =~ /name: \"John\"/
         resultCode == 200
     }
 

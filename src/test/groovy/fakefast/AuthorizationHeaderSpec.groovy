@@ -16,9 +16,9 @@ class AuthorizationHeaderSpec extends Specification {
     def "a bearer AuthorizationHeader consists of a provided token"() {
         def result
         when:
-        result = new AuthorizationHeader(type: "Bearer", token: "oauthToken")
+        result = new AuthorizationHeader(type: "Bearer", name: "George")
         then:
-        result.value() == "Bearer oauthToken"
+        result.value() == "Bearer GeorgeOAuth"
     }
 
     def "can create a full header"() {

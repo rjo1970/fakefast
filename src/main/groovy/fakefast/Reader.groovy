@@ -17,6 +17,8 @@ class Reader {
         properties.setProperty("file.resource.loader.path", new File("src/main/resources").absolutePath)
         ve.init(properties)
         context.put("NAME", endpoint.name)
+        context.put("OAUTH", "${endpoint.name}OAuth")
+        context.put("SERVICE", endpoint.service)
         File file = new Users(name: endpoint.name, service: endpoint.service).toFile()
         exists = file.exists()
     }

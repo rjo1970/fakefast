@@ -1,3 +1,5 @@
 {
-  name: ${NAME}
+  name: "${NAME}",
+  token: "${OAUTH}",
+  service: "${SERVICE}"
 }
