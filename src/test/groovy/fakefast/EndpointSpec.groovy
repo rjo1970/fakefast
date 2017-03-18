@@ -42,7 +42,7 @@ public class EndpointSpec extends Specification {
         def text
         given:
         new Endpoint(url: "/example", method: "GET", body: "Hello, world!").make()
-        http = new HTTPBuilder('http://localhost:8181')
+        http = new HTTPBuilder("http://localhost:${Endpoint.port()}")
         when:
         http.get(path: "/example") { resp, reader ->
             text = reader.text

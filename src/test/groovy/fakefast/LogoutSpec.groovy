@@ -6,7 +6,7 @@ import spock.lang.Specification
 
 class LogoutSpec extends Specification {
     def "Logout works for John with a Bearer certificate"() {
-        HTTPBuilder http = new HTTPBuilder('http://localhost:8181')
+        HTTPBuilder http = new HTTPBuilder("http://localhost:${Endpoint.port()}")
         def text
         def resultCode
         http.setHeaders([Authorization: new AuthorizationHeader(

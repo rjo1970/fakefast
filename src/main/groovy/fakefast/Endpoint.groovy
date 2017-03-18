@@ -28,7 +28,7 @@ public class Endpoint {
         }
     }
 
-    private copyProperties(source, target) {
+    private static void copyProperties(source, target) {
         source.properties.each { key, value ->
             if (target.hasProperty(key) && !(key in ['class', 'metaClass']))
                 target[key] = value
@@ -37,21 +37,27 @@ public class Endpoint {
 
     def make() {
         configureAuthorization()
+        if (findBody()) {
+            splitUrl()
+            resultCode = findResultCode()
+            createEndpoint(resultCode)
+            Reporter.addEndpoint(this)
+        }
+        this
+    }
+
+    private boolean findBody() {
         Reader reader
         if (!body) {
             reader = new Reader(this)
-            if (!reader.doesExist()) {
-                return this
-            } else {
+            if (reader.doesExist()) {
                 body = reader.text()
+                return true
+            } else {
+                return false
             }
         }
-
-        splitUrl()
-        resultCode = findResultCode()
-        createEndpoint(resultCode)
-        Reporter.addEndpoint(this)
-        this
+        return true
     }
 
     private void configureAuthorization() {
@@ -116,9 +122,9 @@ public class Endpoint {
         new MockServerClient("127.0.0.1", port())
     }
 
-    def port() {
+    def static port() {
         try {
-            def p = System.getEnv("serverPort")
+            def p = System.getenv("port") != null ? System.getenv("port") : "8181"
             return Integer.parseInt(p)
         } catch(Exception e) {
             return 8181

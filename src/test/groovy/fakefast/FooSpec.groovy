@@ -6,7 +6,7 @@ import spock.lang.Specification
 
 class FooSpec extends Specification {
     def "/foo endpoint accepts two parameters"() {
-        HTTPBuilder http = new HTTPBuilder('http://localhost:8181')
+        HTTPBuilder http = new HTTPBuilder("http://localhost:${Endpoint.port()}")
         def text
         def resultCode
         when:

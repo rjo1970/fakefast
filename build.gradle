@@ -17,6 +17,8 @@ dependencies {
     compile 'org.mock-server:mockserver-client-java:3.10.4'
 
     compile 'org.apache.velocity:velocity:1.7'
+    compile 'javassist:javassist:3.12.1.GA'
+
 
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4-rc-3'
     testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7'
@@ -27,6 +29,7 @@ task bootRun(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = "org.mockserver.cli.Main"
     args('-serverPort', System.getenv("port") != null ? System.getenv("port") : "8181")
+
 }
 
 task pushit(type: JavaExec) {

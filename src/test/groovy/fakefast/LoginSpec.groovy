@@ -7,7 +7,7 @@ import spock.lang.*
 class LoginSpec extends Specification {
 
     def "login works for John"() {
-        HTTPBuilder http = new HTTPBuilder('http://localhost:8181')
+        HTTPBuilder http = new HTTPBuilder("http://localhost:${Endpoint.port()}")
         def text
         def resultCode
         http.setHeaders([Authorization: new AuthorizationHeader(
@@ -26,7 +26,7 @@ class LoginSpec extends Specification {
 
 
     def "login fails for an Unauthorized attempt"() {
-        HTTPBuilder http = new HTTPBuilder('http://localhost:8181')
+        HTTPBuilder http = new HTTPBuilder("http://localhost:${Endpoint.port()}")
         def text
         def resultCode
         when:
