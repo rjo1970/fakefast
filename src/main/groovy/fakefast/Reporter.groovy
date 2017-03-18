@@ -9,9 +9,16 @@ class Reporter {
 
     private static String generateEndpointReport(Endpoint endpoint) {
         if (endpoint.name != Endpoint.UNAUTHORIZED) {
-            "${endpoint.url} => ${endpoint.resultCode} (${endpoint.name})"
+            "${endpoint.url} => ${endpoint.resultCode} (${endpoint.name})\n${curlExample(endpoint)}"
         } else {
-            "${endpoint.url} => ${endpoint.resultCode}"
+            "${endpoint.url} => ${endpoint.resultCode}\n${curlExample(endpoint)}"
         }
+    }
+
+    static String curlExample(Endpoint endpoint) {
+        def header = endpoint.authHeader()
+        def headerParam = (header.length() > 0) ? "-H \"${header}\"" : ""
+
+        "curl -X ${endpoint.method} ${headerParam} \"http://${endpoint.hostname()}:${endpoint.port()}${endpoint.url}\""
     }
 }

@@ -1,5 +1,6 @@
 package fakefast
 
+import groovyx.net.http.HTTPBuilder
 import spock.lang.*
 
 public class EndpointSpec extends Specification {
@@ -33,6 +34,23 @@ public class EndpointSpec extends Specification {
         then:
         result.path == "/foo"
         result.pathArguments == [a: ["1"], b: ["two"]]
+    }
+
+    def "An endpoint can accept a provided body"() {
+        def http
+        def resultCode
+        def text
+        given:
+        new Endpoint(url: "/example", method: "GET", body: "Hello, world!").make()
+        http = new HTTPBuilder('http://localhost:8181')
+        when:
+        http.get(path: "/example") { resp, reader ->
+            text = reader.text
+            resultCode = resp.statusLine.statusCode
+        }
+        then:
+        text == "Hello, world!"
+        resultCode == 200
     }
 
 }

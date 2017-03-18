@@ -13,21 +13,17 @@ public class Endpoint {
     def pathArguments
     def method = "POST"
     def resultCode = 200
+    def body
     AuthorizationHeader authorizationHeader
     String name = UNAUTHORIZED
+    String authType = "Basic"
+    String password = "password"
 
     def makeAll() {
         Users.find().each { name ->
             Endpoint endpoint = new Endpoint()
             copyProperties(this, endpoint)
             endpoint.name = name
-            if (name == UNAUTHORIZED) {
-                endpoint.authorizationHeader = null
-            } else {
-                if (endpoint.authorizationHeader) {
-                    endpoint.authorizationHeader.name = name
-                }
-            }
             endpoint.make()
         }
     }
@@ -40,18 +36,37 @@ public class Endpoint {
     }
 
     def make() {
-        Reader reader = new Reader(this)
-        if (!reader.doesExist()) {
-            return
+        configureAuthorization()
+        Reader reader
+        if (!body) {
+            reader = new Reader(this)
+            if (!reader.doesExist()) {
+                return this
+            } else {
+                body = reader.text()
+            }
         }
 
         splitUrl()
         resultCode = findResultCode()
-        createEndpoint(resultCode, reader)
+        createEndpoint(resultCode)
         Reporter.addEndpoint(this)
+        this
     }
 
-    private void createEndpoint(resultCode, Reader reader) {
+    private void configureAuthorization() {
+        if (name == UNAUTHORIZED) {
+            authorizationHeader = null
+        } else {
+            if (authorizationHeader) {
+                authorizationHeader.name = name
+            } else {
+                authorizationHeader = new AuthorizationHeader(name: name, password: password, type: authType)
+            }
+        }
+    }
+
+    private void createEndpoint(resultCode) {
         def req = request()
                 .withMethod(method)
                 .withPath(path)
@@ -66,7 +81,7 @@ public class Endpoint {
 
         def res = response()
                 .withStatusCode(resultCode)
-                .withBody(reader.text())
+                .withBody(body)
 
         build().when(
                 req
@@ -101,13 +116,24 @@ public class Endpoint {
         new MockServerClient("127.0.0.1", port())
     }
 
-    private port() {
+    def port() {
         try {
             def p = System.getEnv("serverPort")
             return Integer.parseInt(p)
         } catch(Exception e) {
             return 8181
         }
+    }
+
+    def hostname() {
+        InetAddress.getLocalHost().getCanonicalHostName()
+    }
+
+    def authHeader() {
+        if (authorizationHeader) {
+            return "Authorization: ${authorizationHeader.value()}"
+        }
+        ""
     }
 
     public reset() {

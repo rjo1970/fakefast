@@ -15,7 +15,7 @@ class LoginSpec extends Specification {
                 name: 'John',
                 password: 'password').value()])
         when:
-        http.post(path: "/user/login", ) { resp, reader ->
+        http.post(path: "/user/login") { resp, reader ->
             text =  reader.text
             resultCode =  resp.statusLine.statusCode
         }

@@ -13,10 +13,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'org.codehaus.groovy:groovy-all:2.4.9'
 
-    // https://mvnrepository.com/artifact/org.mock-server/mockserver-netty
     compile 'org.mock-server:mockserver-netty:3.10.4'
-
-    // https://mvnrepository.com/artifact/org.mock-server/mockserver-client-java
     compile 'org.mock-server:mockserver-client-java:3.10.4'
 
     compile 'org.apache.velocity:velocity:1.7'
