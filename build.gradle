@@ -12,7 +12,13 @@ repositories {
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'org.codehaus.groovy:groovy-all:2.4.9'
-    compile name: 'mockserver-netty-3.10.4-jar-with-dependencies'
+
+    // https://mvnrepository.com/artifact/org.mock-server/mockserver-netty
+    compile 'org.mock-server:mockserver-netty:3.10.4'
+
+    // https://mvnrepository.com/artifact/org.mock-server/mockserver-client-java
+    compile 'org.mock-server:mockserver-client-java:3.10.4'
+
     compile 'org.apache.velocity:velocity:1.7'
 
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4-rc-3'
@@ -21,7 +27,7 @@ dependencies {
 
 task bootRun(type: JavaExec) {
     description "start the mock server"
-    classpath = files('libs/mockserver-netty-3.10.4-jar-with-dependencies.jar')
+    classpath = sourceSets.main.runtimeClasspath
     main = "org.mockserver.cli.Main"
     args('-serverPort', System.getenv("port") != null ? System.getenv("port") : "8181")
 }
