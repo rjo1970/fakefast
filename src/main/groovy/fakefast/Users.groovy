@@ -7,6 +7,8 @@ class Users {
     def name
     def service
 
+    def DEFAULT_RESULT = [statusCode: 200]
+
     public static find() {
         def baseDir = new File("src/main/resources")
         def users = []
@@ -29,11 +31,11 @@ class Users {
             def body = new JsonSlurper().parseText(stuff)
             def section = body[service]
             if (section == null) {
-                return [resultCode: 200]
+                return DEFAULT_RESULT
             }
             section
         } catch (FileNotFoundException e) {
-            return [resultCode: 200]
+            return DEFAULT_RESULT
         }
     }
 }

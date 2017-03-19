@@ -41,23 +41,23 @@ class UsersSpec extends Specification {
         when:
         result = new Users(name: "unauthorized", service: "login").readServices()
         then:
-        result == [resultCode: 401]
+        result == [statusCode: 401]
     }
 
-    def "can recover a [resultCode: 200] if the file is not present"() {
+    def "can recover a [statusCode: 200] if the file is not present"() {
         def result
         when:
         result = new Users(name: "Ringo", service: "login").readServices()
         then:
-        result == [resultCode: 200]
+        result == [statusCode: 200]
     }
 
-    def "can recover a [resultCode: 200 if the file exists but the entry does not"() {
+    def "can recover a [statusCode: 200 if the file exists but the entry does not"() {
         def result
         when:
         result = new Users(name: "Ringo", service: "login").readServices()
         then:
-        result == [resultCode: 200]
+        result == [statusCode: 200]
     }
 
 

@@ -12,7 +12,7 @@ public class Endpoint {
     def path
     def pathArguments
     def method = "POST"
-    def resultCode = 200
+    def statusCode = 200
     def body
     AuthorizationHeader authorizationHeader
     String name = UNAUTHORIZED
@@ -39,8 +39,8 @@ public class Endpoint {
         configureAuthorization()
         if (findBody()) {
             splitUrl()
-            resultCode = findResultCode()
-            createEndpoint(resultCode)
+            statusCode = findStatusCode()
+            createEndpoint(statusCode)
             Reporter.addEndpoint(this)
         }
         this
@@ -72,7 +72,7 @@ public class Endpoint {
         }
     }
 
-    private void createEndpoint(resultCode) {
+    private void createEndpoint(statusCode) {
         def req = request()
                 .withMethod(method)
                 .withPath(path)
@@ -86,7 +86,7 @@ public class Endpoint {
         }
 
         def res = response()
-                .withStatusCode(resultCode)
+                .withStatusCode(statusCode)
                 .withBody(body)
 
         build().when(
@@ -97,10 +97,10 @@ public class Endpoint {
         )
     }
 
-    private Object findResultCode() {
+    private Object findStatusCode() {
         def config = new Users(name: name, service: service).readServices()
-        resultCode = config["resultCode"]
-        resultCode
+        statusCode = config["statusCode"]
+        statusCode
     }
 
     private splitUrl() {

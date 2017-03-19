@@ -9,7 +9,7 @@ class LoginSpec extends Specification {
     def "login works for John"() {
         HTTPBuilder http = new HTTPBuilder("http://localhost:${Endpoint.port()}")
         def text
-        def resultCode
+        def statusCode
         http.setHeaders([Authorization: new AuthorizationHeader(
                 type: 'Basic',
                 name: 'John',
@@ -17,22 +17,22 @@ class LoginSpec extends Specification {
         when:
         http.post(path: "/user/login") { resp, reader ->
             text =  reader.text
-            resultCode =  resp.statusLine.statusCode
+            statusCode =  resp.statusLine.statusCode
         }
         then:
         text =~ /name: \"John\"/
-        resultCode == 200
+        statusCode == 200
     }
 
 
     def "login fails for an Unauthorized attempt"() {
         HTTPBuilder http = new HTTPBuilder("http://localhost:${Endpoint.port()}")
         def text
-        def resultCode
+        def statusCode
         when:
         http.post(path: "/user/login", ) { resp, reader ->
             text =  reader.text
-            resultCode =  resp.statusLine.statusCode
+            statusCode =  resp.statusLine.statusCode
         }
         then:
         thrown HttpResponseException

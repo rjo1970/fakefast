@@ -123,7 +123,7 @@ To set a different response code, open or create a `services.json` file in the s
 
 {
   "login": {
-    "resultCode": 401
+    "statusCode": 401
   }
 }
 

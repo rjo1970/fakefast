@@ -9,9 +9,9 @@ class Reporter {
 
     private static String generateEndpointReport(Endpoint endpoint) {
         if (endpoint.name != Endpoint.UNAUTHORIZED) {
-            "${endpoint.url} => ${endpoint.resultCode} (${endpoint.name})\n${curlExample(endpoint)}"
+            "${endpoint.url} => ${endpoint.statusCode} (${endpoint.name})\n${curlExample(endpoint)}"
         } else {
-            "${endpoint.url} => ${endpoint.resultCode}\n${curlExample(endpoint)}"
+            "${endpoint.url} => ${endpoint.statusCode}\n${curlExample(endpoint)}"
         }
     }
 

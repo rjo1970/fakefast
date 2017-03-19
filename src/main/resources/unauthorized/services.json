@@ -1,5 +1,5 @@
 {
   "login": {
-    "resultCode": 401
+    "statusCode": 401
   }
 }

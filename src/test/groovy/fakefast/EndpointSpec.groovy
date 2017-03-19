@@ -6,7 +6,7 @@ import spock.lang.*
 public class EndpointSpec extends Specification {
 
 
-    def "An Endpoint has a service, url, method, resultCode"() {
+    def "An Endpoint has a service, url, method, statusCode"() {
         def result
         when:
         result = new Endpoint(service: "foo", url: "/foo")
@@ -14,7 +14,7 @@ public class EndpointSpec extends Specification {
         result.service == 'foo'
         result.url == '/foo'
         result.method == "POST"
-        result.resultCode == 200
+        result.statusCode == 200
     }
 
     def "An Endpoint can take an authorization header"() {
@@ -38,7 +38,7 @@ public class EndpointSpec extends Specification {
 
     def "An endpoint can accept a provided body"() {
         def http
-        def resultCode
+        def statusCode
         def text
         given:
         new Endpoint(url: "/example", method: "GET", body: "Hello, world!").make()
@@ -46,11 +46,11 @@ public class EndpointSpec extends Specification {
         when:
         http.get(path: "/example") { resp, reader ->
             text = reader.text
-            resultCode = resp.statusLine.statusCode
+            statusCode = resp.statusLine.statusCode
         }
         then:
         text == "Hello, world!"
-        resultCode == 200
+        statusCode == 200
     }
 
 }
