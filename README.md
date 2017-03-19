@@ -22,7 +22,7 @@ Starting a Gradle Daemon (subsequent builds will be faster)
 * Make an endpoint under `src/main/groovy/fakefast/services`
 
 ```groovy
-// bar.groovy
+// Bar.groovy
 
 package fakefast.services
 
@@ -116,8 +116,8 @@ Starting a Gradle Daemon (subsequent builds will be faster)
 
 ```
 
-* ResponseCodes are 200, unless overridden.  
-To set a different response code, open or create a `services.json` file in the same folder as your velocity macro and put an entry in for the service you want to change:
+* Status codes are 200, unless overridden.
+To set a different status code, open or create a `services.json` file in the same folder as your velocity macro and put an entry in for the service you want to change:
 
 ```json
 
